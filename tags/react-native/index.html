@@ -1,20 +1,284 @@
-extends includes/layout
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-block content
-    - var categoriesList = list_categories({ show_count: false })
-    - var tagsList = list_tags({ show_count: false })
-    - var archivesList = list_archives({ show_count: false })
 
-    div.archive
-      each post in site.posts.sort('date', -1).toArray()
-        .archive-item
-          div
-            if post.link
-                a.archive-item__link(href=url_for(post.link) target="_blank")
-                  span.archive-item__link__time(datetime=date_xml(post.date))= date(post.date)
-                  span.archive-item__link__title=post.title || 'No Title'
-            else
-                a.archive-item__link(href=url_for(post.path))
-                  span.archive-item__link__time(datetime=date_xml(post.date))= date(post.date)
-                  span.archive-item__link__title=post.title || 'No Title'
 
+<title>
+  
+    标签: react-native
+  
+</title>
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Easoll">
+<meta property="og:url" content="http://www.mrhere.cn/tags/react-native/index.html">
+<meta property="og:site_name" content="Easoll">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Easoll">
+
+
+
+
+  <link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="/perfect-scrollbar/css/perfect-scrollbar.min.css">
+<link rel="stylesheet" href="/styles/main.css">
+
+
+
+
+
+
+</head>
+<body
+  
+    class="monochrome"
+  
+  >
+  <div class="mobile-header">
+  <button class="sidebar-toggle" type="button">
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+  </button>
+  <a class="title" href="/">Easoll</a>
+</div>
+
+  <div class="main-container">
+    <div class="sidebar">
+  <div class="header">
+    <h1 class="title"><a href="/">Easoll</a></h1>
+    
+    <div class="info">
+      <div class="content">
+        
+        
+      </div>
+      
+        <div class="avatar">
+          
+            <a href="/about"><img src="https://cn.gravatar.com/avatar/35fef74d731255cd569c2c2b0b9e87e4?s=200"></a>
+          
+        </div>
+      
+    </div>
+  </div>
+  <div class="body">
+    
+      
+        <ul class="nav">
+          
+            
+              <li class="category-list-container">
+                <a href="javascript:;">分类</a>
+                
+              </li>
+            
+          
+            
+              <li class="tag-list-container">
+                <a href="javascript:;">标签</a>
+                <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/bsdiff-python/">bsdiff python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react-native/">react-native</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a><span class="tag-list-count">1</span></li></ul>
+              </li>
+            
+          
+            
+              <li class="archive-list-container">
+                <a href="javascript:;">归档</a>
+                <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016</a><span class="archive-list-count">1</span></li></ul>
+              </li>
+            
+          
+        </ul>
+      
+        <ul class="nav">
+          
+            
+              <li>
+                <a href="/" title="Homepage">Homepage</a>
+              </li>
+            
+          
+            
+              <li>
+                <a href="/archives" title="By Year">By Year</a>
+              </li>
+            
+          
+        </ul>
+      
+        <ul class="nav">
+          
+            
+              <li>
+                <a href="https://github.com/easoll" title="Github" target="_blank" rel="external">Github</a>
+              </li>
+            
+          
+        </ul>
+      
+    
+  </div>
+</div>
+
+    <div class="main-content">
+      
+        <div style="max-width: 1000px">
+      
+          <h1>react-native</h1>
+
+
+  
+  
+    <div class="post-list">
+  
+
+    <div class="post-list-item article">
+      <h3 class="article-header">
+        <a href="/2017/09/19/react-native踩坑记录/" >
+  react-native踩坑记录
+</a>
+
+      </h3>
+      
+
+      <div class="article-info">
+        <a href="/2017/09/19/react-native踩坑记录/"><span class="article-date">
+  2017-09-19
+</span>
+</a>
+        
+
+        
+	<span class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/react-native/">react-native</a></li></ul>
+	</span>
+
+
+      </div>
+      <div class="article-entry">
+        
+          <p>#安卓真机如何打开dev menu<br>在RN的默认页面会显示</p>
+<blockquote>
+<p>Double tap R on your keyboard to reload,<br>Shake or press menu button for dev menu</p>
+</blockquote>
+<p>这句话是说想要打开dev menu可以使劲摇你的手机或者点击手机上的菜单按钮，<br>如果摇一摇没有的话，换一个手机，如果你的手机没有菜单按钮的话，换一个手机</p>
+<h1 id="Reload-加载失败"><a href="#Reload-加载失败" class="headerlink" title="Reload 加载失败"></a>Reload 加载失败</h1><ol>
+<li>reload时需要在项目更目录下运行react-native start命令以启动打包服务器    </li>
+<li>测试机与打包服务器需要再同一wifi环境且要在Dev Setting中设置打包服务器的ip，<br>或者是用数据线将测试机连接到电脑上并运行:<blockquote>
+<p>adb reverse tcp:8001 tcp:8081</p>
+</blockquote>
+</li>
+</ol>
+<h1 id="Button-设置margin失效"><a href="#Button-设置margin失效" class="headerlink" title="Button 设置margin失效"></a><a href="https://facebook.github.io/react-native/docs/button.html" target="_blank" rel="external">Button</a> 设置margin失效</h1><p>在使用button的时候你会发现给它设置margin根本没有作用，此时可以使用<a href="https://facebook.github.io/react-native/docs/touchableopacity.html" target="_blank" rel="external">TouchableOpacity</a><br>组件替代button</p>
+<h1 id="FlatList-如何下拉刷新"><a href="#FlatList-如何下拉刷新" class="headerlink" title="FlatList 如何下拉刷新"></a><a href="https://facebook.github.io/react-native/docs/flatlist.html" target="_blank" rel="external">FlatList</a> 如何下拉刷新</h1><p>FlatList是用来替换ListView的RN组件，官方文档中提及FlatList支持下拉刷新</p>
+<blockquote>
+<p>A performant interface for rendering simple, flat lists, supporting the most handy features:<br>Fully cross-platform.    </p>
+<p>Optional horizontal mode.<br>Configurable viewability callbacks.<br>Header support.<br>Footer support.<br>Separator support.<br>Pull to Refresh.<br>Scroll loading.<br>ScrollToIndex support.    </p>
+</blockquote>
+<p>但是如果如果你只是简单的使用FlatList而不设置任何属性的话你会发现往下拉的时候<br>根本没有反应。此时你需要设置onRefresh属性，这样下拉时才会有反应，而你也能<br>在onRefresh方法中做数据刷新。</p>
+
+        
+      </div>
+    </div>
+
+  
+    </div>
+  
+
+
+
+
+
+
+          <div class="main-footer">
+  
+    © 2017 Easoll - Powered by <a href="http://hexo.io" target="_blank">Hexo</a> - Theme <a href="https://github.com/denjones/hexo-theme-chan" target="_blank">Chan</a>
+  
+</div>
+
+      
+        </div>
+      
+    </div>
+  </div>
+  <script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+  <link rel="stylesheet" href="/PhotoSwipe/photoswipe.css">
+  <link rel="stylesheet" href="/PhotoSwipe/default-skin/default-skin.css">
+
+  <!-- Root element of PhotoSwipe. Must have class pswp. -->
+  <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+             It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+      <!-- Container that holds slides.
+                PhotoSwipe keeps only 3 of them in the DOM to save memory.
+                Don't modify these 3 pswp__item elements, data is added later on. -->
+      <div class="pswp__container">
+        <div class="pswp__item"></div>
+        <div class="pswp__item"></div>
+        <div class="pswp__item"></div>
+      </div>
+
+      <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+      <div class="pswp__ui pswp__ui--hidden">
+
+        <div class="pswp__top-bar">
+
+          <!--  Controls are self-explanatory. Order can be changed. -->
+
+          <div class="pswp__counter"></div>
+
+          <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+          <button class="pswp__button pswp__button--share" title="Share"></button>
+
+          <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+          <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+          <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+          <!-- element will get class pswp__preloader--active when preloader is running -->
+          <div class="pswp__preloader">
+            <div class="pswp__preloader__icn">
+              <div class="pswp__preloader__cut">
+                <div class="pswp__preloader__donut"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+          <div class="pswp__share-tooltip"></div>
+        </div>
+
+        <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+
+        <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+
+        <div class="pswp__caption">
+          <div class="pswp__caption__center"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/PhotoSwipe/photoswipe.js"></script>
+  <script src="/PhotoSwipe/photoswipe-ui-default.js"></script>
+
+
+<script src="/perfect-scrollbar/js/min/perfect-scrollbar.min.js"></script>
+<script src="/scripts/main.js"></script>
+
+</body>
+</html>
