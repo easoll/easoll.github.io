@@ -53,7 +53,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="android,转载,adb," />
 
 
 
@@ -69,12 +69,46 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Easoll">
-<meta property="og:url" content="http://www.mrhere.cn/index.html">
+<meta name="description" content="查看原文ADB，即 Android Debug Bridge，它是 Android 开发/测试人员不可替代的强大工具，也是 Android 设备玩家的好玩具。
+注： 有部分命令的支持情况可能与 Android 系统版本及定制 ROM 的实现有关。
+目录
+
+基本用法
+命令语法
+为命令指定目标设备
+启动/停止
+查看 adb 版本
+以 root 权限运行 adbd
+指定 adb server 的网络端口">
+<meta property="og:type" content="article">
+<meta property="og:title" content="adb用法大全">
+<meta property="og:url" content="http://www.mrhere.cn/2017/10/08/adb用法大全/index.html">
 <meta property="og:site_name" content="Easoll">
+<meta property="og:description" content="查看原文ADB，即 Android Debug Bridge，它是 Android 开发/测试人员不可替代的强大工具，也是 Android 设备玩家的好玩具。
+注： 有部分命令的支持情况可能与 Android 系统版本及定制 ROM 的实现有关。
+目录
+
+基本用法
+命令语法
+为命令指定目标设备
+启动/停止
+查看 adb 版本
+以 root 权限运行 adbd
+指定 adb server 的网络端口">
+<meta property="og:updated_time" content="2017-10-08T08:21:40.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Easoll">
+<meta name="twitter:title" content="adb用法大全">
+<meta name="twitter:description" content="查看原文ADB，即 Android Debug Bridge，它是 Android 开发/测试人员不可替代的强大工具，也是 Android 设备玩家的好玩具。
+注： 有部分命令的支持情况可能与 Android 系统版本及定制 ROM 的实现有关。
+目录
+
+基本用法
+命令语法
+为命令指定目标设备
+启动/停止
+查看 adb 版本
+以 root 权限运行 adbd
+指定 adb server 的网络端口">
 
 
 
@@ -104,13 +138,13 @@
 
 
 
-  <link rel="canonical" href="http://www.mrhere.cn/"/>
+  <link rel="canonical" href="http://www.mrhere.cn/2017/10/08/adb用法大全/"/>
 
 
 
 
 
-  <title>Easoll</title>
+  <title>adb用法大全 | Easoll</title>
   
 
 
@@ -129,8 +163,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -223,9 +256,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -255,9 +288,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/08/adb用法大全/" itemprop="url">adb用法大全</a></h1>
+          <h1 class="post-title" itemprop="name headline">adb用法大全</h1>
         
 
         <div class="post-meta">
@@ -307,9 +338,7 @@
       
 
       
-        
-          
-            <p><a href="https://github.com/mzlogin/awesome-adb" target="_blank" rel="external">查看原文</a><br>ADB，即 <a href="https://developer.android.com/studio/command-line/adb.html" target="_blank" rel="external">Android Debug Bridge</a>，它是 Android 开发/测试人员不可替代的强大工具，也是 Android 设备玩家的好玩具。</p>
+        <p><a href="https://github.com/mzlogin/awesome-adb" target="_blank" rel="external">查看原文</a><br>ADB，即 <a href="https://developer.android.com/studio/command-line/adb.html" target="_blank" rel="external">Android Debug Bridge</a>，它是 Android 开发/测试人员不可替代的强大工具，也是 Android 设备玩家的好玩具。</p>
 <p><strong>注：</strong> 有部分命令的支持情况可能与 Android 系统版本及定制 ROM 的实现有关。</p>
 <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><!-- vim-markdown-toc GFM -->
 <ul>
@@ -2042,8 +2071,6 @@
 <li><a href="http://cabins.github.io/2016/03/25/UseAdbLikeAPro-2/" target="_blank" rel="external">像高手一样使用ADB命令行（2）</a></li>
 </ul>
 
-          
-        
       
     </div>
     
@@ -2058,338 +2085,40 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.mrhere.cn/2017/10/08/安卓广播总结/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Easoll">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/08/安卓广播总结/" itemprop="url">安卓广播总结</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T15:21:54+08:00">
-                2017-10-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/android/" rel="tag"># android</a>
           
-            
+            <a href="/tags/转载/" rel="tag"># 转载</a>
           
-
+            <a href="/tags/adb/" rel="tag"># adb</a>
           
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="注册广播接收器"><a href="#注册广播接收器" class="headerlink" title="注册广播接收器"></a>注册广播接收器</h1><p>注册广播接收器可以在manifest文件中静态注册也可以在代码中用Context实例动态注册。需要注意的是，如果你在manifest中注册了广播接收器，当你监听的广播发出的时候，广播接收器都能接收到广播，而不管之前你的应用有没有运行。但是如果你是用context注册广播接收器的话，只有当你注册的context还有效的时候你才能接收到广播。比如你使用Activity来注册广播监听器，那么你只能在Activity还未销毁的时候才能接收到广播。如果你使用Application来注册广播接收器，那么你只有在应用运行的时候才能接收到广播。</p>
-<h1 id="注销广播接收器"><a href="#注销广播接收器" class="headerlink" title="注销广播接收器"></a>注销广播接收器</h1><p>对于使用context注册的广播接收器，如果你想停止接收广播，你可以使用unregisterReceiver(BroadcastReceiver)来停止接收。当你不再需要广播接收器或者context不再有效的时候你应该注销它。需要注意一下你注册和注销广播接收器的地方，以免出现内存泄漏。比如你在activity的onCreate（Bundle）中注册了广播接收器，你就应该在onDestroy（）中注销它；如果你在onResume（）中注册就应该在onPause（）中注销。</p>
-<h1 id="发送广播"><a href="#发送广播" class="headerlink" title="发送广播"></a>发送广播</h1><p>安卓提供了三总方法来发送广播</p>
-<ul>
-<li>sendOrderedBroadcast(Intent, String)</li>
-<li>sendBroadcast(Intent)</li>
-<li>LocalBroadcastManager.sendBroadcast()</li>
-</ul>
-<h1 id="广播接收器对进程状态的影响。"><a href="#广播接收器对进程状态的影响。" class="headerlink" title="广播接收器对进程状态的影响。"></a>广播接收器对进程状态的影响。</h1><p> 广播接收器的状态能够影响容器进程的状态，也就是说这将影响它被系统杀死的可能性。比如当进程正在执行广播接收器的时候（当前执行的代码在onReceive方法中），该进程就会被视作为前台进程。系统将保证它的正常运行，除非内存极度缺乏的情况下才会杀死该进程。然而，一旦运行的代码从onReceive中返回之后，广播接收器就不再是活动状态。该宿主进程的优先级将由运行在该进程内的其他组件决定。如果进程内只包含一个在manifest中声明的广播接收器，那么一旦从onReceive中返回，系统将把它视作一个低优先级的进程并且可能将它杀死来为其他更重要的进程提供资源。基于以上原因，你不应该在广播接收其中开启后台进程，而应该使用goAsync()或者是JobService。</p>
-<h1 id="权限问题"><a href="#权限问题" class="headerlink" title="权限问题"></a>权限问题</h1><ul>
-<li>当你发送广播的时候，你能够指明一个权限参数，只有那些在manifest文件中申请了相应权限（如果是危险权限的话需要用户已经授权）的接收器能接收到该广播。</li>
-<li>当你注册广播接收器的时候，如果你指明了一个权限参数，那么只有那些在manifest文件中申请了相应权限（如果是危险权限的话需要用户已经授权）的应用能向改接收器发送广播。</li>
-</ul>
-<h1 id="其他注意事项"><a href="#其他注意事项" class="headerlink" title="其他注意事项"></a>其他注意事项</h1><ol>
-<li><p>在安卓7.0及更高的版本中，一下的系统广播将不再发送。这个优化将影响到所有的应用，不仅仅是那些面向安卓7.0开发的应用。</p>
-<ul>
-<li>ACTION_NEW_PICTURE</li>
-<li>ACTION_NEW_VIDEO    </li>
-</ul>
-</li>
-<li><p>那些面向安卓7.0（api 24）及更高的版本开发的应用必须使用registerReceiver(BroadcastReceiver, IntentFilter)来注册广播监听。在manifest文件中注册监听将不再起作用         </p>
-<ul>
-<li>CONNECTIVITY_ACTION</li>
-</ul>
-</li>
-<li><p>从安卓8.0（api 26）开始，系统对在manifest中声明的广播接收器增加了额外的限制。如果你的应用面向api 26或者更高，你将不能在manifest中声明接收隐式广播（没有特意指明发送给你的应用的广播）的接收器。</p>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
       
 
       
       
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
       
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.mrhere.cn/2017/09/25/安卓通知栏消息使用总结/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Easoll">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/25/安卓通知栏消息使用总结/" itemprop="url">安卓通知栏消息使用总结</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-25T12:54:35+08:00">
-                2017-09-25
-              </time>
+              <a href="/2017/10/08/安卓广播总结/" rel="next" title="安卓广播总结">
+                <i class="fa fa-chevron-left"></i> 安卓广播总结
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/android/" itemprop="url" rel="index">
-                    <span itemprop="name">android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <h1 id="通知组成："><a href="#通知组成：" class="headerlink" title="通知组成："></a>通知组成：</h1><h2 id="头部区域"><a href="#头部区域" class="headerlink" title="头部区域"></a>头部区域</h2><p>头部区域由以下几部分组成：</p>
-<ol>
-<li>小图标，该图应该是白色，透明底的，否则显示会有问题</li>
-<li>应用名称</li>
-<li>头部内容（可选项）</li>
-<li>时间戳（可选项)</li>
-<li>展开提示</li>
-</ol>
-<p><img src="/images/notifications-anatomy-01-header.png" alt="通知头部区域"></p>
-<h2 id="内容区域"><a href="#内容区域" class="headerlink" title="内容区域"></a>内容区域</h2><p>内容区域由以下几部分组成：</p>
-<ol>
-<li>内容标题</li>
-<li>具体内容</li>
-<li>大图标（可选项）<br><img src="/images/notifications-anatomy-02-content.png" alt="通知内容区域"></li>
-</ol>
-<h2 id="动作区域"><a href="#动作区域" class="headerlink" title="动作区域"></a>动作区域</h2><p>当通知展开时，在其底部最多可以展示三个通知。</p>
-<p>在安卓 N 以及之后的版本中，动作的图标将不再显示以显示更多的字。但是开发时还是应该提供动作的图标，因为安卓 N 之前的版本，android wear 和android auto都依赖它</p>
-<h1 id="通知展现形式"><a href="#通知展现形式" class="headerlink" title="通知展现形式"></a>通知展现形式</h1><ul>
-<li>在状态栏显示一个iocn</li>
-<li>显示在锁屏页面</li>
-<li>播放声音或者震动</li>
-<li>显示在当前页面</li>
-<li>闪动设备的led灯</li>
-</ul>
-<h1 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h1><p>google在它的应用中使用到了一下几种通知模板：</p>
-<h2 id="标准模板"><a href="#标准模板" class="headerlink" title="标准模板"></a>标准模板</h2><p>标准模板使用于大多数的通知，可以显示精简的内容，一个大图标和动作<br><img src="/images/notifications-templates-01-standard.png" alt="标准模板"></p>
-<h2 id="长文字模板"><a href="#长文字模板" class="headerlink" title="长文字模板"></a>长文字模板</h2><p>当你有一大串文字需要展示的时候应该使用这个模板。当这个通知展开的时候它可以让用户预览到更多的文字。<br><img src="/images/notifications-templates-02-big-text.png" alt="长文字模板"></p>
-<h2 id="大图模板"><a href="#大图模板" class="headerlink" title="大图模板"></a>大图模板</h2><p>当通知包含图片的时候应该使用这个模板。当通知未展开时大图标区域会显示图片的缩略图，当通知展开时用户能看到一个更大的预览图。<br><img src="/images/notifications-templates-03-big-picture.png" alt="大图模板"></p>
-<h2 id="进度条模板"><a href="#进度条模板" class="headerlink" title="进度条模板"></a>进度条模板</h2><p>当用户发起的任务需要花一段时间才能完成，并且该任务需要能随时取消时应该使用该模板。(不可取消的任务不能显示在通知栏)<br><img src="/images/notifications-templates-04-progress.png" alt="进度条模板"></p>
-<h2 id="多媒体模板"><a href="#多媒体模板" class="headerlink" title="多媒体模板"></a>多媒体模板</h2><p>该模板能让用户控制当前正在播放的多媒体</p>
-<ul>
-<li>折叠视图最多能显示三个动作按钮，并且大图标区域能显示一张相关图片，比如专辑封面</li>
-<li>展开视图最多能显示五个动作按钮和一张大点的图，或者不显示图片只显示六个动作按钮。图片的颜色会被自动填充到背景和其他组件上。<br><img src="/images/notifications-templates-05-media.png" alt="多媒体模板"></li>
-</ul>
-<h2 id="消息模板"><a href="#消息模板" class="headerlink" title="消息模板"></a>消息模板</h2><p>该模板是为实时通信设计的。作为可选项，你可以让用户直接在通知上回复消息<br><img src="/images/notifications-templates-06-messaging.png" alt="消息模板"></p>
-<p>参考链接:<br><a href="https://material.io/guidelines/patterns/notifications.html" target="_blank" rel="external">https://material.io/guidelines/patterns/notifications.html</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -2399,720 +2128,11 @@
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.mrhere.cn/2017/09/24/react-native热更新方案/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Easoll">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/24/react-native热更新方案/" itemprop="url">安卓端react-native热更新方案</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-24T15:00:53+08:00">
-                2017-09-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/react-native/" itemprop="url" rel="index">
-                    <span itemprop="name">react-native</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="1-RN加载js文件的机制"><a href="#1-RN加载js文件的机制" class="headerlink" title="1 RN加载js文件的机制"></a>1 RN加载js文件的机制</h1><p>做过安卓原生热更新的同学都知道，要实现热更新需要自己实现一个DexClassLoader来加载需要热更新的类。同理，要实现RN的热更新自然需要我们自己来控制js文件的加载逻辑。那么RN是如何加载js文件的呢？首先，我们在开发的时候会有多个js文件，但是在我们构建release包的时候，这些js文件会连同rn源代码和第三方库被打包进一个叫做index.android.bundle的js文件中，这个文件会被放到asset目录中去，然后RN应用在启动的时候就会去加载这个js文件。<br><img src="/images/assets.png" alt="release apk 中的内容"><br>那么RN具体是如何加载这个js的呢？我们可以看到在RN的MainApplicat这个类中实现了ReactApplication这个接口，该接口如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">public interface ReactApplication &#123;</div><div class="line"></div><div class="line">  /**</div><div class="line">   * Get the default &#123;@link ReactNativeHost&#125; for this app.</div><div class="line">   */</div><div class="line">  ReactNativeHost getReactNativeHost();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>而在ReactNativeHost这个类中有以下两个方法，其中getJsBundleFile这个方法的注释中写到这个方法是用来返回自定义的bundle路径的。至此，我们知道了，想要加载我们自己的js文件可以通过覆写该方法来实现。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">protected ReactInstanceManager createReactInstanceManager() &#123;</div><div class="line">  ReactInstanceManagerBuilder builder = ReactInstanceManager.builder()</div><div class="line">	.setApplication(mApplication)</div><div class="line">	.setJSMainModuleName(getJSMainModuleName())</div><div class="line">	.setUseDeveloperSupport(getUseDeveloperSupport())</div><div class="line">	.setRedBoxHandler(getRedBoxHandler())</div><div class="line">	.setUIImplementationProvider(getUIImplementationProvider())</div><div class="line">	.setInitialLifecycleState(LifecycleState.BEFORE_CREATE);</div><div class="line"></div><div class="line">  for (ReactPackage reactPackage : getPackages()) &#123;</div><div class="line">	builder.addPackage(reactPackage);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  String jsBundleFile = getJSBundleFile();</div><div class="line">  if (jsBundleFile != null) &#123;</div><div class="line">	builder.setJSBundleFile(jsBundleFile);</div><div class="line">  &#125; else &#123;</div><div class="line">	builder.setBundleAssetName(Assertions.assertNotNull(getBundleAssetName()));</div><div class="line">  &#125;</div><div class="line">  return builder.build();</div><div class="line">&#125;</div><div class="line"></div><div class="line">/**</div><div class="line">   * Returns a custom path of the bundle file. This is used in cases the bundle should be loaded</div><div class="line">   * from a custom path. By default it is loaded from Android assets, from a path specified</div><div class="line">   * by &#123;@link getBundleAssetName&#125;.</div><div class="line">   * e.g. &quot;file://sdcard/myapp_cache/index.android.bundle&quot;</div><div class="line">   */</div><div class="line">  protected @Nullable String getJSBundleFile() &#123;</div><div class="line">    return null;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
-<h1 id="2-RN打包命令"><a href="#2-RN打包命令" class="headerlink" title="2 RN打包命令"></a>2 RN打包命令</h1><p>我们已经知道了如何来加载自己的js文件了，那么我们的这个js文件又该如何生成呢？可以使用react-native bundle命令,该命令的详细使用如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">RNHotFix react-native bundle -h</div><div class="line">Scanning 577 folders for symlinks in /Users/nali/workspace/react-native/RNHotFix/node_modules (5ms)</div><div class="line"></div><div class="line">  react-native bundle [options]</div><div class="line">  builds the javascript bundle for offline use</div><div class="line"></div><div class="line">  Options:</div><div class="line"></div><div class="line">    --entry-file &lt;path&gt;                Path to the root JS file, either absolute or relative to JS root</div><div class="line">    --platform [string]                Either &quot;ios&quot; or &quot;android&quot;</div><div class="line">    --transformer [string]             Specify a custom transformer to be used</div><div class="line">    --dev [boolean]                    If false, warnings are disabled and the bundle is minified</div><div class="line">    --bundle-output &lt;string&gt;           File name where to store the resulting bundle, ex. /tmp/groups.bundle</div><div class="line">    --bundle-encoding [string]         Encoding the bundle should be written in (https://nodejs.org/api/buffer.html#buffer_buffer).</div><div class="line">    --max-workers [number]             Specifies the maximum number of workers the worker-pool will spawn for transforming files. This defaults to the number of the cores available on your machine.</div><div class="line">    --sourcemap-output [string]        File name where to store the sourcemap file for resulting bundle, ex. /tmp/groups.map</div><div class="line">    --sourcemap-sources-root [string]  Path to make sourcemap&apos;s sources entries relative to, ex. /root/dir</div><div class="line">    --sourcemap-use-absolute-path      Report SourceMapURL using its full path</div><div class="line">    --assets-dest [string]             Directory name where to store assets referenced in the bundle</div><div class="line">    --verbose                          Enables logging</div><div class="line">    --reset-cache                      Removes cached files</div><div class="line">    --read-global-cache                Try to fetch transformed JS code from the global cache, if configured.</div><div class="line">    --config [string]                  Path to the CLI configuration file</div><div class="line">    -h, --help                         output usage information</div></pre></td></tr></table></figure></p>
-<p>在安卓上我们可以通过以下命令来生成我们的bundle：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">react-native bundle --entry-file index.android.js --bundle-output ./bundle/index.android.bundle --platform android --assets-dest ./bundle --dev false</div></pre></td></tr></table></figure></p>
-<h1 id="3-热更新Demo"><a href="#3-热更新Demo" class="headerlink" title="3. 热更新Demo"></a>3. 热更新Demo</h1><p>为了方便理解，笔者这里写了RN热更新的客户端实现和服务端小Demo，欢迎star和issue。<br><a href="https://github.com/easoll/RNHotFixAndroidClient" target="_blank" rel="external">客户端</a><br><a href="https://github.com/easoll/RNHotFixServer" target="_blank" rel="external">服务端</a></p>
-<p>热更新服务端采用python的flask框架实现，服务端只提供两个接口，一个用来检测客户端是否需要更新bundle，一个用来供客户端下载最新bundle。最新的js bundle需放到latestJsBundle目录中，且名称必须为“2.3.4.3”这种格式。</p>
-<h1 id="4-TODO"><a href="#4-TODO" class="headerlink" title="4. TODO"></a>4. TODO</h1><ul>
-<li>完整性校验</li>
-<li>增量更新</li>
-</ul>
-
-          
-        
+    <div class="post-spread">
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.mrhere.cn/2017/09/21/bsdiff-python文档/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Easoll">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/21/bsdiff-python文档/" itemprop="url">bsdiff python文档</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-21T12:45:22+08:00">
-                2017-09-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>bsdiff python模块中有两个方法:</p>
-<ol>
-<li><p>Diff(origData, newData);<br>很明显该方法的参数为原始数据和新数据，返回值用于构造新数据</p>
-</li>
-<li><p>Patch(origData, newDataLength, controlTuples, diffBlock, extraBlock)<br>该方法的参数为原始数据，新数据的长度以及Diff方法的返回值，返回值为新数据</p>
-</li>
-</ol>
-<p><a href="http://starship.python.net/crew/atuining/cx_bsdiff/html/module.html" target="_blank" rel="external">原文链接</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.mrhere.cn/2017/09/19/react-native踩坑记录/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Easoll">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/19/react-native踩坑记录/" itemprop="url">react-native踩坑记录</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-19T17:43:54+08:00">
-                2017-09-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/react-native/" itemprop="url" rel="index">
-                    <span itemprop="name">react-native</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#安卓真机如何打开dev menu<br>在RN的默认页面会显示</p>
-<blockquote>
-<p>Double tap R on your keyboard to reload,<br>Shake or press menu button for dev menu</p>
-</blockquote>
-<p>这句话是说想要打开dev menu可以使劲摇你的手机或者点击手机上的菜单按钮，<br>如果摇一摇没有的话，换一个手机，如果你的手机没有菜单按钮的话，换一个手机</p>
-<h1 id="Reload-加载失败"><a href="#Reload-加载失败" class="headerlink" title="Reload 加载失败"></a>Reload 加载失败</h1><ol>
-<li>reload时需要在项目更目录下运行react-native start命令以启动打包服务器    </li>
-<li>测试机与打包服务器需要再同一wifi环境且要在Dev Setting中设置打包服务器的ip，<br>或者是用数据线将测试机连接到电脑上并运行:<blockquote>
-<p>adb reverse tcp:8001 tcp:8081</p>
-</blockquote>
-</li>
-</ol>
-<h1 id="Button-设置margin失效"><a href="#Button-设置margin失效" class="headerlink" title="Button 设置margin失效"></a><a href="https://facebook.github.io/react-native/docs/button.html" target="_blank" rel="external">Button</a> 设置margin失效</h1><p>在使用button的时候你会发现给它设置margin根本没有作用，此时可以使用<a href="https://facebook.github.io/react-native/docs/touchableopacity.html" target="_blank" rel="external">TouchableOpacity</a><br>组件替代button</p>
-<h1 id="FlatList-如何下拉刷新"><a href="#FlatList-如何下拉刷新" class="headerlink" title="FlatList 如何下拉刷新"></a><a href="https://facebook.github.io/react-native/docs/flatlist.html" target="_blank" rel="external">FlatList</a> 如何下拉刷新</h1><p>FlatList是用来替换ListView的RN组件，官方文档中提及FlatList支持下拉刷新</p>
-<blockquote>
-<p>A performant interface for rendering simple, flat lists, supporting the most handy features:<br>Fully cross-platform.    </p>
-<p>Optional horizontal mode.<br>Configurable viewability callbacks.<br>Header support.<br>Footer support.<br>Separator support.<br>Pull to Refresh.<br>Scroll loading.<br>ScrollToIndex support.    </p>
-</blockquote>
-<p>但是如果如果你只是简单的使用FlatList而不设置任何属性的话你会发现往下拉的时候<br>根本没有反应。此时你需要设置onRefresh属性，这样下拉时才会有反应，而你也能<br>在onRefresh方法中做数据刷新。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.mrhere.cn/2017/01/05/java设计模式常见问题总结/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Easoll">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/01/05/java设计模式常见问题总结/" itemprop="url">java设计模式常见问题总结</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-05T14:13:57+08:00">
-                2017-01-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/设计模式/" itemprop="url" rel="index">
-                    <span itemprop="name">设计模式</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>对java的23种设计模式还不了解的同学可以参考该博客:<a href="http://www.cnblogs.com/maowang1991/archive/2013/04/15/3023236.html" target="_blank" rel="external">http://www.cnblogs.com/maowang1991/archive/2013/04/15/3023236.html</a></p>
-<p>1.工厂模式与建造者模式的区别<br>    我的理解是使用工厂模式创建出来的所有对象都是一模一样的，而使用建造者模式创建出来的不同对象可能拥有不同的属性。什么叫不同的对象拥有不同的属性呢？为了方便理解，这里举个安卓中的具体例子：AlertDialog.Builder<br>    安卓中的AlertDialog这个类的创建就是使用了建造者模式。一般来说我们创建一个AlertDialog实例的方法是：</p>
-<blockquote>
-<p>new AlertDialog.Builder(MainActivity.this).builder.setMessage(“确认退出吗？”).builder.setTitle(“提示”).create();</p>
-</blockquote>
-<p>我们在每次在创建AlertDialog的时候可以设置不同的Message和Title，每次设置的不同的Message或者Title就是不同的属性。</p>
-<p>2.代理模式与装饰器模式的区别<br>    装饰器模式关注于在一个对象上动态的添加方法，然而代理模式关注于控制对对象的访问。换句话 说，用代理模式，代理类（proxy class）可以对它的客户隐藏一个对象的具体信息。因此，当使用代理模式的时候，我们常常在一个代理类中创建一个对象的实例。并且，当我们使用装饰器模 式的时候，我们通常的做法是将原始对象作为一个参数传给装饰者的构造器。<br>    我们可以用另外一句话来总结这些差别：使用代理模式，代理和真实对象之间的的关系通常在编译时就已经确定了，而装饰者能够在运行时递归地被构造。    </p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.mrhere.cn/2016/12/19/welcome/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Easoll">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/12/19/welcome/" itemprop="url">welcome</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-19T14:43:00+08:00">
-                2016-12-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcom to my blog, you can contact me by:</p>
-<ul>
-<li>Email: easoll.xiong@gmail.com</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
 
 
           </div>
@@ -3120,6 +2140,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -3140,8 +2164,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           
             <p class="site-author-name" itemprop="name"></p>
@@ -3202,6 +2235,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#目录"><span class="nav-number">1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本用法"><span class="nav-number">2.</span> <span class="nav-text">基本用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#命令语法"><span class="nav-number">2.1.</span> <span class="nav-text">命令语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为命令指定目标设备"><span class="nav-number">2.2.</span> <span class="nav-text">为命令指定目标设备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动-停止"><span class="nav-number">2.3.</span> <span class="nav-text">启动/停止</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看-adb-版本"><span class="nav-number">2.4.</span> <span class="nav-text">查看 adb 版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#以-root-权限运行-adbd"><span class="nav-number">2.5.</span> <span class="nav-text">以 root 权限运行 adbd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指定-adb-server-的网络端口"><span class="nav-number">2.6.</span> <span class="nav-text">指定 adb server 的网络端口</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设备连接管理"><span class="nav-number">3.</span> <span class="nav-text">设备连接管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查询已连接设备-模拟器"><span class="nav-number">3.1.</span> <span class="nav-text">查询已连接设备/模拟器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#USB-连接"><span class="nav-number">3.2.</span> <span class="nav-text">USB 连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#无线连接（需要借助-USB-线）"><span class="nav-number">3.3.</span> <span class="nav-text">无线连接（需要借助 USB 线）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#无线连接（无需借助-USB-线）"><span class="nav-number">3.4.</span> <span class="nav-text">无线连接（无需借助 USB 线）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用管理"><span class="nav-number">4.</span> <span class="nav-text">应用管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看应用列表"><span class="nav-number">4.1.</span> <span class="nav-text">查看应用列表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#所有应用"><span class="nav-number">4.1.1.</span> <span class="nav-text">所有应用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#系统应用"><span class="nav-number">4.1.2.</span> <span class="nav-text">系统应用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第三方应用"><span class="nav-number">4.1.3.</span> <span class="nav-text">第三方应用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#包名包含某字符串的应用"><span class="nav-number">4.1.4.</span> <span class="nav-text">包名包含某字符串的应用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装-APK"><span class="nav-number">4.2.</span> <span class="nav-text">安装 APK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#卸载应用"><span class="nav-number">4.3.</span> <span class="nav-text">卸载应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#清除应用数据与缓存"><span class="nav-number">4.4.</span> <span class="nav-text">清除应用数据与缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看前台-Activity"><span class="nav-number">4.5.</span> <span class="nav-text">查看前台 Activity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看正在运行的-Services"><span class="nav-number">4.6.</span> <span class="nav-text">查看正在运行的 Services</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#与应用交互"><span class="nav-number">5.</span> <span class="nav-text">与应用交互</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#调起-Activity"><span class="nav-number">5.1.</span> <span class="nav-text">调起 Activity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调起-Service"><span class="nav-number">5.2.</span> <span class="nav-text">调起 Service</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#发送广播"><span class="nav-number">5.3.</span> <span class="nav-text">发送广播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#强制停止应用"><span class="nav-number">5.4.</span> <span class="nav-text">强制停止应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件管理"><span class="nav-number">6.</span> <span class="nav-text">文件管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#复制设备里的文件到电脑"><span class="nav-number">6.1.</span> <span class="nav-text">复制设备里的文件到电脑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复制电脑里的文件到设备"><span class="nav-number">6.2.</span> <span class="nav-text">复制电脑里的文件到设备</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模拟按键-输入"><span class="nav-number">7.</span> <span class="nav-text">模拟按键/输入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#电源键"><span class="nav-number">7.1.</span> <span class="nav-text">电源键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#菜单键"><span class="nav-number">7.2.</span> <span class="nav-text">菜单键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HOME-键"><span class="nav-number">7.3.</span> <span class="nav-text">HOME 键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#返回键"><span class="nav-number">7.4.</span> <span class="nav-text">返回键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#音量控制"><span class="nav-number">7.5.</span> <span class="nav-text">音量控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#媒体控制"><span class="nav-number">7.6.</span> <span class="nav-text">媒体控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#点亮-熄灭屏幕"><span class="nav-number">7.7.</span> <span class="nav-text">点亮/熄灭屏幕</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#滑动解锁"><span class="nav-number">7.8.</span> <span class="nav-text">滑动解锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入文本"><span class="nav-number">7.9.</span> <span class="nav-text">输入文本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看日志"><span class="nav-number">8.</span> <span class="nav-text">查看日志</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Android-日志"><span class="nav-number">8.1.</span> <span class="nav-text">Android 日志</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#按级别过滤日志"><span class="nav-number">8.1.1.</span> <span class="nav-text">按级别过滤日志</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#按-tag-和级别过滤日志"><span class="nav-number">8.1.2.</span> <span class="nav-text">按 tag 和级别过滤日志</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#日志格式"><span class="nav-number">8.1.3.</span> <span class="nav-text">日志格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#清空日志"><span class="nav-number">8.1.4.</span> <span class="nav-text">清空日志</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内核日志"><span class="nav-number">8.2.</span> <span class="nav-text">内核日志</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看设备信息"><span class="nav-number">9.</span> <span class="nav-text">查看设备信息</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#型号"><span class="nav-number">9.1.</span> <span class="nav-text">型号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#电池状况"><span class="nav-number">9.2.</span> <span class="nav-text">电池状况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#屏幕分辨率"><span class="nav-number">9.3.</span> <span class="nav-text">屏幕分辨率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#屏幕密度"><span class="nav-number">9.4.</span> <span class="nav-text">屏幕密度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#显示屏参数"><span class="nav-number">9.5.</span> <span class="nav-text">显示屏参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#android-id"><span class="nav-number">9.6.</span> <span class="nav-text">android_id</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IMEI"><span class="nav-number">9.7.</span> <span class="nav-text">IMEI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android-系统版本"><span class="nav-number">9.8.</span> <span class="nav-text">Android 系统版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IP-地址"><span class="nav-number">9.9.</span> <span class="nav-text">IP 地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mac-地址"><span class="nav-number">9.10.</span> <span class="nav-text">Mac 地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU-信息"><span class="nav-number">9.11.</span> <span class="nav-text">CPU 信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存信息"><span class="nav-number">9.12.</span> <span class="nav-text">内存信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更多硬件与系统属性"><span class="nav-number">9.13.</span> <span class="nav-text">更多硬件与系统属性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改设置"><span class="nav-number">10.</span> <span class="nav-text">修改设置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分辨率"><span class="nav-number">10.1.</span> <span class="nav-text">分辨率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#屏幕密度-1"><span class="nav-number">10.2.</span> <span class="nav-text">屏幕密度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#显示区域"><span class="nav-number">10.3.</span> <span class="nav-text">显示区域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关闭-USB-调试模式"><span class="nav-number">10.4.</span> <span class="nav-text">关闭 USB 调试模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#状态栏和导航栏的显示隐藏"><span class="nav-number">10.5.</span> <span class="nav-text">状态栏和导航栏的显示隐藏</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实用功能"><span class="nav-number">11.</span> <span class="nav-text">实用功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#屏幕截图"><span class="nav-number">11.1.</span> <span class="nav-text">屏幕截图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#录制屏幕"><span class="nav-number">11.2.</span> <span class="nav-text">录制屏幕</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重新挂载-system-分区为可写"><span class="nav-number">11.3.</span> <span class="nav-text">重新挂载 system 分区为可写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看连接过的-WiFi-密码"><span class="nav-number">11.4.</span> <span class="nav-text">查看连接过的 WiFi 密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置系统日期和时间"><span class="nav-number">11.5.</span> <span class="nav-text">设置系统日期和时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重启手机"><span class="nav-number">11.6.</span> <span class="nav-text">重启手机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#检测设备是否已-root"><span class="nav-number">11.7.</span> <span class="nav-text">检测设备是否已 root</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-Monkey-进行压力测试"><span class="nav-number">11.8.</span> <span class="nav-text">使用 Monkey 进行压力测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开启-关闭-WiFi"><span class="nav-number">11.9.</span> <span class="nav-text">开启/关闭 WiFi</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#刷机相关命令"><span class="nav-number">12.</span> <span class="nav-text">刷机相关命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#重启到-Recovery-模式"><span class="nav-number">12.1.</span> <span class="nav-text">重启到 Recovery 模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从-Recovery-重启到-Android"><span class="nav-number">12.2.</span> <span class="nav-text">从 Recovery 重启到 Android</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重启到-Fastboot-模式"><span class="nav-number">12.3.</span> <span class="nav-text">重启到 Fastboot 模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过-sideload-更新系统"><span class="nav-number">12.4.</span> <span class="nav-text">通过 sideload 更新系统</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更多-adb-shell-命令"><span class="nav-number">13.</span> <span class="nav-text">更多 adb shell 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看进程"><span class="nav-number">13.1.</span> <span class="nav-text">查看进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看实时资源占用情况"><span class="nav-number">13.2.</span> <span class="nav-text">查看实时资源占用情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其它"><span class="nav-number">13.3.</span> <span class="nav-text">其它</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见问题"><span class="nav-number">14.</span> <span class="nav-text">常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#启动-adb-server-失败"><span class="nav-number">14.1.</span> <span class="nav-text">启动 adb server 失败</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#adb-的非官方实现"><span class="nav-number">15.</span> <span class="nav-text">adb 的非官方实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#致谢"><span class="nav-number">16.</span> <span class="nav-text">致谢</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">17.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
