@@ -238,6 +238,705 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.mrhere.cn/2017/11/04/okhttp中interceptors和networkInterceptors的区别/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Easoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/04/okhttp中interceptors和networkInterceptors的区别/" itemprop="url">okhttp中interceptors和networkInterceptors的区别</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-04T15:24:10+08:00">
+                2017-11-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在学习okhttp时发现在OkHttpClient内部有两个用来存储interceptor的链表，分别是interceptors和networkInterceptors,那么这两个列表中存储的interceptor有什么区别呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public class OkHttpClien&#123;</div><div class="line">	final List&lt;Interceptor&gt; interceptors;</div><div class="line">	final List&lt;Interceptor&gt; networkInterceptors;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>要想弄清楚这个问题，我们首先要知道Interceptor是什么并且okhttp的网络请求处理流程是怎样的。</p>
+<h1 id="Interceptor简介"><a href="#Interceptor简介" class="headerlink" title="Interceptor简介"></a>Interceptor简介</h1><p>Interceptor是一个接口,类图如下所示<br><img src="/images/okhttp.png" alt="标准模板"></p>
+<p>java 文档中对其的介绍是：</p>
+<blockquote>
+<p>Observes, modifies, and potentially short-circuits requests going out and the corresponding responses coming back in. Typically interceptors add, remove, or transform headers on the request or response.</p>
+</blockquote>
+<p>就是说Interceptor观察，修改并且可能短路发送的请求和相应的服务端返回的内容。一些特殊的Interceptor会添加，删除或者转换网络请求和响应的头部。</p>
+<h1 id="okhttp网络请求处理流程"><a href="#okhttp网络请求处理流程" class="headerlink" title="okhttp网络请求处理流程"></a>okhttp网络请求处理流程</h1><p>okhttp网络请求的核心代码如下所示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">final class RealCall implements Call &#123;</div><div class="line">	Response getResponseWithInterceptorChain() throws IOException &#123;</div><div class="line">    // Build a full stack of interceptors.</div><div class="line">    List&lt;Interceptor&gt; interceptors = new ArrayList&lt;&gt;();</div><div class="line">    interceptors.addAll(client.interceptors());</div><div class="line">    interceptors.add(retryAndFollowUpInterceptor);</div><div class="line">    interceptors.add(new BridgeInterceptor(client.cookieJar()));</div><div class="line">    interceptors.add(new CacheInterceptor(client.internalCache()));</div><div class="line">    interceptors.add(new ConnectInterceptor(client));</div><div class="line">    if (!forWebSocket) &#123;</div><div class="line">      interceptors.addAll(client.networkInterceptors());</div><div class="line">    &#125;</div><div class="line">    interceptors.add(new CallServerInterceptor(forWebSocket));</div><div class="line"></div><div class="line">    Interceptor.Chain chain = new RealInterceptorChain(interceptors, null, null, null, 0,</div><div class="line">        originalRequest, this, eventListener, client.connectTimeoutMillis(),</div><div class="line">        client.readTimeoutMillis(), client.writeTimeoutMillis());</div><div class="line"></div><div class="line">    return chain.proceed(originalRequest);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public final class RealInterceptorChain implements Interceptor.Chain &#123;</div><div class="line">	private final List&lt;Interceptor&gt; interceptors;</div><div class="line">	private final int index;</div><div class="line"></div><div class="line">	public Response proceed(Request request, StreamAllocation</div><div class="line"></div><div class="line">    // Call the next interceptor in the chain.</div><div class="line">    RealInterceptorChain next = new RealInterceptorChain(interceptors, streamAllocation, httpCodec,</div><div class="line">        connection, index + 1, request, call, eventListener, connectTimeout, readTimeout,</div><div class="line">        writeTimeout);</div><div class="line">    Interceptor interceptor = interceptors.get(index);</div><div class="line">    Response response = interceptor.intercept(next);</div><div class="line"></div><div class="line"></div><div class="line">    return response;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>我们看到，最后调用了RealInterceptorChain的procced方法来处理我们的请求。RealInterceptorChain类内部维护了一个index，用来记录传进来的request应该由哪个Interceptor来处理。在Interceptor的intercept方法中只要通过调用chain.process就可将请求传递给下一个Interceptor来处理。这种模式是一个典型的责任链模式。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>由于interceptors和networkInterces在责任链中的位置不同，他们能做的事情也就不同了。比如，如果我们要对服务端返回的数据做自定义缓存就应该在interceptors中处理，而如果我们想控制网络请求的创建连接等就应该在networkInterceptor中处理了</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.mrhere.cn/2017/11/04/安卓踩坑记录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Easoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/04/安卓踩坑记录/" itemprop="url">安卓踩坑记录</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-04T13:11:44+08:00">
+                2017-11-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/android/" itemprop="url" rel="index">
+                    <span itemprop="name">android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="windows下运行adb-device无法查看到自己的设备"><a href="#windows下运行adb-device无法查看到自己的设备" class="headerlink" title="windows下运行adb device无法查看到自己的设备"></a>windows下运行adb device无法查看到自己的设备</h1><ol>
+<li><p>手机未开启开发者模式, 如何开启可参考:<a href="https://developer.android.com/studio/debug/dev-options.html" target="_blank" rel="external">https://developer.android.com/studio/debug/dev-options.html</a></p>
+</li>
+<li><p>电脑未安装google USB驱动， 具体如何安装可参考:<a href="https://developer.android.com/studio/run/win-usb.html?hl=zh-cn" target="_blank" rel="external">https://developer.android.com/studio/run/win-usb.html?hl=zh-cn</a></p>
+</li>
+</ol>
+<h1 id="常见开发错误"><a href="#常见开发错误" class="headerlink" title="常见开发错误"></a>常见开发错误</h1><ol>
+<li>写布局文件时错把View写成view(注意首字母大写),导致layoutinflater找不到相应的类</li>
+<li>新建activity，service后忘记在<a href="https://developer.android.com/guide/topics/manifest/manifest-intro.html" target="_blank" rel="external">manifest</a>文件中添加相应的声明，导致组件无法启动.</li>
+<li>开发<a href="https://developer.android.com/guide/components/fragments.html" target="_blank" rel="external">fragment</a>时，使用了系统的fragment和<a href="https://developer.android.com/topic/libraries/support-library/index.html" target="_blank" rel="external">support包</a>中的fragment manage</li>
+<li>使用LinearLayout时忘记设置orientation属性</li>
+<li>webview中的图片有时能加载有时不能加载，可能是因为你对WebSettings设置了setBlockNetworkImage</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.mrhere.cn/2017/11/04/安卓源码在线查看/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Easoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/04/安卓源码在线查看/" itemprop="url">安卓源码在线查看</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-04T12:45:04+08:00">
+                2017-11-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/android/" itemprop="url" rel="index">
+                    <span itemprop="name">android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>关于如何下载安卓源码网上有一大堆的教程，但是鉴于国内的情况，想要正常下好一个版本的安卓源码可以说是长路漫漫了。这里推荐一个安卓源码在线查看网站，该网站可查看所有版本安卓的源码，还可查找引用。实在是安卓开发人员必备<br><a href="http://androidxref.com/" target="_blank" rel="external">http://androidxref.com/</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.mrhere.cn/2017/10/25/gradle常用命令/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Easoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/25/gradle常用命令/" itemprop="url">gradle常用命令</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-25T19:03:16+08:00">
+                2017-10-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/gradle/" itemprop="url" rel="index">
+                    <span itemprop="name">gradle</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="查看包含的项目"><a href="#查看包含的项目" class="headerlink" title="查看包含的项目"></a>查看包含的项目</h1><p>gradle projects</p>
+<h1 id="查看项目包含哪些task"><a href="#查看项目包含哪些task" class="headerlink" title="查看项目包含哪些task"></a>查看项目包含哪些task</h1><p>gralde 项目路径:tasks</p>
+<h1 id="查看项目依赖"><a href="#查看项目依赖" class="headerlink" title="查看项目依赖"></a>查看项目依赖</h1><p>gradle 项目路径:dependencies</p>
+<h1 id="查看安卓依赖"><a href="#查看安卓依赖" class="headerlink" title="查看安卓依赖"></a>查看安卓依赖</h1><p>gradle 项目路径:androidDepenedncies</p>
+<h1 id="查看详细输出"><a href="#查看详细输出" class="headerlink" title="查看详细输出"></a>查看详细输出</h1><p>使用 –debug 选项，该选项可以输出详细信息，比如下载外部依赖失败时可以加上该参数来查看具体是哪个依赖无法下载</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.mrhere.cn/2017/10/19/python中repr与str的区别/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Easoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/19/python中repr与str的区别/" itemprop="url">python中repr与str的区别</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-19T20:07:05+08:00">
+                2017-10-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="python-内建函数-str-和-repr-的区别"><a href="#python-内建函数-str-和-repr-的区别" class="headerlink" title="python 内建函数 str() 和 repr() 的区别"></a>python 内建函数 str() 和 repr() 的区别</h1><ol>
+<li>内建函数str()和repr() 或反引号操作符（``）可以方便地以字符串的方式获取对象的内容、类型、数值属性等信息。</li>
+<li>str()函数得到的字符串可读性好（故被print调用）</li>
+<li>repr()函数得到的字符串通常可以用来重新获得该对象，通常情况下 obj==eval(repr(obj)) 这个等式是成立的。这两个函数接受一个对象作为其参数，返回适当的字符串。</li>
+<li>事实上repr()和``做一样的事情，返回一个对象的“官方”字符串表示。其结果绝大多数情况下（不是所有）可以通过求值运算（内建函数eval()）重新得到该对象。str()则不同，它生成一个对象的可读性好的字符串表示，结果通常无法用eval()求值，但适合print输出。</li>
+</ol>
+<h1 id="实例："><a href="#实例：" class="headerlink" title="实例："></a>实例：</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">a = &apos;Hello, world.&apos;</div><div class="line">b = str(a)</div><div class="line">c = eval(repr(a))</div><div class="line">print a==b</div><div class="line">print a==c</div><div class="line">print str(a)   #对用户友好</div><div class="line">print repr(a)  # 对python友好</div></pre></td></tr></table></figure>
+<p>结果如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">True</div><div class="line">False</div><div class="line">True</div><div class="line">Hello, world.  </div><div class="line">&apos;Hello, world.&apos;</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.mrhere.cn/2017/10/10/主流开源协议简介及对比/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2744,589 +3443,13 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.mrhere.cn/2017/09/21/bsdiff-python文档/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Easoll">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/21/bsdiff-python文档/" itemprop="url">bsdiff python文档</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-21T12:45:22+08:00">
-                2017-09-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/杂谈/" itemprop="url" rel="index">
-                    <span itemprop="name">杂谈</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>bsdiff python模块中有两个方法:</p>
-<ol>
-<li><p>Diff(origData, newData);<br>很明显该方法的参数为原始数据和新数据，返回值用于构造新数据</p>
-</li>
-<li><p>Patch(origData, newDataLength, controlTuples, diffBlock, extraBlock)<br>该方法的参数为原始数据，新数据的长度以及Diff方法的返回值，返回值为新数据</p>
-</li>
-</ol>
-<p><a href="http://starship.python.net/crew/atuining/cx_bsdiff/html/module.html" target="_blank" rel="external">原文链接</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.mrhere.cn/2017/09/19/react-native踩坑记录/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Easoll">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/19/react-native踩坑记录/" itemprop="url">react-native踩坑记录</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-19T17:43:54+08:00">
-                2017-09-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/react-native/" itemprop="url" rel="index">
-                    <span itemprop="name">react-native</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#安卓真机如何打开dev menu<br>在RN的默认页面会显示</p>
-<blockquote>
-<p>Double tap R on your keyboard to reload,<br>Shake or press menu button for dev menu</p>
-</blockquote>
-<p>这句话是说想要打开dev menu可以使劲摇你的手机或者点击手机上的菜单按钮，<br>如果摇一摇没有的话，换一个手机，如果你的手机没有菜单按钮的话，换一个手机</p>
-<h1 id="Reload-加载失败"><a href="#Reload-加载失败" class="headerlink" title="Reload 加载失败"></a>Reload 加载失败</h1><ol>
-<li>reload时需要在项目更目录下运行react-native start命令以启动打包服务器    </li>
-<li>测试机与打包服务器需要再同一wifi环境且要在Dev Setting中设置打包服务器的ip，<br>或者是用数据线将测试机连接到电脑上并运行:<blockquote>
-<p>adb reverse tcp:8001 tcp:8081</p>
-</blockquote>
-</li>
-</ol>
-<h1 id="Button-设置margin失效"><a href="#Button-设置margin失效" class="headerlink" title="Button 设置margin失效"></a><a href="https://facebook.github.io/react-native/docs/button.html" target="_blank" rel="external">Button</a> 设置margin失效</h1><p>在使用button的时候你会发现给它设置margin根本没有作用，此时可以使用<a href="https://facebook.github.io/react-native/docs/touchableopacity.html" target="_blank" rel="external">TouchableOpacity</a><br>组件替代button</p>
-<h1 id="FlatList-如何下拉刷新"><a href="#FlatList-如何下拉刷新" class="headerlink" title="FlatList 如何下拉刷新"></a><a href="https://facebook.github.io/react-native/docs/flatlist.html" target="_blank" rel="external">FlatList</a> 如何下拉刷新</h1><p>FlatList是用来替换ListView的RN组件，官方文档中提及FlatList支持下拉刷新</p>
-<blockquote>
-<p>A performant interface for rendering simple, flat lists, supporting the most handy features:<br>Fully cross-platform.    </p>
-<p>Optional horizontal mode.<br>Configurable viewability callbacks.<br>Header support.<br>Footer support.<br>Separator support.<br>Pull to Refresh.<br>Scroll loading.<br>ScrollToIndex support.    </p>
-</blockquote>
-<p>但是如果如果你只是简单的使用FlatList而不设置任何属性的话你会发现往下拉的时候<br>根本没有反应。此时你需要设置onRefresh属性，这样下拉时才会有反应，而你也能<br>在onRefresh方法中做数据刷新。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.mrhere.cn/2017/01/05/java设计模式常见问题总结/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Easoll">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/01/05/java设计模式常见问题总结/" itemprop="url">java设计模式常见问题总结</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-05T14:13:57+08:00">
-                2017-01-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/设计模式/" itemprop="url" rel="index">
-                    <span itemprop="name">设计模式</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>对java的23种设计模式还不了解的同学可以参考该博客:<a href="http://www.cnblogs.com/maowang1991/archive/2013/04/15/3023236.html" target="_blank" rel="external">http://www.cnblogs.com/maowang1991/archive/2013/04/15/3023236.html</a></p>
-<p>1.工厂模式与建造者模式的区别<br>    我的理解是使用工厂模式创建出来的所有对象都是一模一样的，而使用建造者模式创建出来的不同对象可能拥有不同的属性。什么叫不同的对象拥有不同的属性呢？为了方便理解，这里举个安卓中的具体例子：AlertDialog.Builder<br>    安卓中的AlertDialog这个类的创建就是使用了建造者模式。一般来说我们创建一个AlertDialog实例的方法是：</p>
-<blockquote>
-<p>new AlertDialog.Builder(MainActivity.this).builder.setMessage(“确认退出吗？”).builder.setTitle(“提示”).create();</p>
-</blockquote>
-<p>我们在每次在创建AlertDialog的时候可以设置不同的Message和Title，每次设置的不同的Message或者Title就是不同的属性。</p>
-<p>2.代理模式与装饰器模式的区别<br>    装饰器模式关注于在一个对象上动态的添加方法，然而代理模式关注于控制对对象的访问。换句话 说，用代理模式，代理类（proxy class）可以对它的客户隐藏一个对象的具体信息。因此，当使用代理模式的时候，我们常常在一个代理类中创建一个对象的实例。并且，当我们使用装饰器模 式的时候，我们通常的做法是将原始对象作为一个参数传给装饰者的构造器。<br>    我们可以用另外一句话来总结这些差别：使用代理模式，代理和真实对象之间的的关系通常在编译时就已经确定了，而装饰者能够在运行时递归地被构造。    </p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.mrhere.cn/2016/12/19/welcome/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Easoll">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/12/19/welcome/" itemprop="url">welcome</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-19T14:43:00+08:00">
-                2016-12-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcom to my blog, you can contact me by:</p>
-<ul>
-<li>Email: easoll.xiong@gmail.com</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -3369,7 +3492,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -3380,7 +3503,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -3391,7 +3514,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
