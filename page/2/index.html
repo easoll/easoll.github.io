@@ -238,6 +238,183 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.mrhere.cn/2017/09/25/安卓通知栏消息使用总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Easoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/25/安卓通知栏消息使用总结/" itemprop="url">安卓通知栏消息使用总结</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-25T12:54:35+08:00">
+                2017-09-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/android/" itemprop="url" rel="index">
+                    <span itemprop="name">android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="通知组成："><a href="#通知组成：" class="headerlink" title="通知组成："></a>通知组成：</h1><h2 id="头部区域"><a href="#头部区域" class="headerlink" title="头部区域"></a>头部区域</h2><p>头部区域由以下几部分组成：</p>
+<ol>
+<li>小图标，该图应该是白色，透明底的，否则显示会有问题</li>
+<li>应用名称</li>
+<li>头部内容（可选项）</li>
+<li>时间戳（可选项)</li>
+<li>展开提示</li>
+</ol>
+<p><img src="/images/notifications-anatomy-01-header.png" alt="通知头部区域"></p>
+<h2 id="内容区域"><a href="#内容区域" class="headerlink" title="内容区域"></a>内容区域</h2><p>内容区域由以下几部分组成：</p>
+<ol>
+<li>内容标题</li>
+<li>具体内容</li>
+<li>大图标（可选项）<br><img src="/images/notifications-anatomy-02-content.png" alt="通知内容区域"></li>
+</ol>
+<h2 id="动作区域"><a href="#动作区域" class="headerlink" title="动作区域"></a>动作区域</h2><p>当通知展开时，在其底部最多可以展示三个通知。</p>
+<p>在安卓 N 以及之后的版本中，动作的图标将不再显示以显示更多的字。但是开发时还是应该提供动作的图标，因为安卓 N 之前的版本，android wear 和android auto都依赖它</p>
+<h1 id="通知展现形式"><a href="#通知展现形式" class="headerlink" title="通知展现形式"></a>通知展现形式</h1><ul>
+<li>在状态栏显示一个iocn</li>
+<li>显示在锁屏页面</li>
+<li>播放声音或者震动</li>
+<li>显示在当前页面</li>
+<li>闪动设备的led灯</li>
+</ul>
+<h1 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h1><p>google在它的应用中使用到了一下几种通知模板：</p>
+<h2 id="标准模板"><a href="#标准模板" class="headerlink" title="标准模板"></a>标准模板</h2><p>标准模板使用于大多数的通知，可以显示精简的内容，一个大图标和动作<br><img src="/images/notifications-templates-01-standard.png" alt="标准模板"></p>
+<h2 id="长文字模板"><a href="#长文字模板" class="headerlink" title="长文字模板"></a>长文字模板</h2><p>当你有一大串文字需要展示的时候应该使用这个模板。当这个通知展开的时候它可以让用户预览到更多的文字。<br><img src="/images/notifications-templates-02-big-text.png" alt="长文字模板"></p>
+<h2 id="大图模板"><a href="#大图模板" class="headerlink" title="大图模板"></a>大图模板</h2><p>当通知包含图片的时候应该使用这个模板。当通知未展开时大图标区域会显示图片的缩略图，当通知展开时用户能看到一个更大的预览图。<br><img src="/images/notifications-templates-03-big-picture.png" alt="大图模板"></p>
+<h2 id="进度条模板"><a href="#进度条模板" class="headerlink" title="进度条模板"></a>进度条模板</h2><p>当用户发起的任务需要花一段时间才能完成，并且该任务需要能随时取消时应该使用该模板。(不可取消的任务不能显示在通知栏)<br><img src="/images/notifications-templates-04-progress.png" alt="进度条模板"></p>
+<h2 id="多媒体模板"><a href="#多媒体模板" class="headerlink" title="多媒体模板"></a>多媒体模板</h2><p>该模板能让用户控制当前正在播放的多媒体</p>
+<ul>
+<li>折叠视图最多能显示三个动作按钮，并且大图标区域能显示一张相关图片，比如专辑封面</li>
+<li>展开视图最多能显示五个动作按钮和一张大点的图，或者不显示图片只显示六个动作按钮。图片的颜色会被自动填充到背景和其他组件上。<br><img src="/images/notifications-templates-05-media.png" alt="多媒体模板"></li>
+</ul>
+<h2 id="消息模板"><a href="#消息模板" class="headerlink" title="消息模板"></a>消息模板</h2><p>该模板是为实时通信设计的。作为可选项，你可以让用户直接在通知上回复消息<br><img src="/images/notifications-templates-06-messaging.png" alt="消息模板"></p>
+<p>参考链接:<br><a href="https://material.io/guidelines/patterns/notifications.html" target="_blank" rel="external">https://material.io/guidelines/patterns/notifications.html</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.mrhere.cn/2017/09/24/react-native热更新方案/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1006,7 +1183,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1028,7 +1205,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -1070,7 +1247,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

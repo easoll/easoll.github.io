@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="安卓,进程优先级,hook," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="在安卓中调用Service的startForeground方法可以将service所在进程的优先级提高，减小进程被回收的概率。调用startForeground方法的时候系统会在通知栏显示一个通知，这对于传统的多媒体应用来说是没有问题的。但是对于那些只想提升优先级而不想让用户感知的应用来说强行显示个通知栏看起来太怪异了。
+查看startForeground的源码之后，发现有很重要的两步，如下所示：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="提升进程优先级的一种新姿势">
+<meta property="og:url" content="http://www.mrhere.cn/2018/05/19/提升进程优先级的一种新姿势/index.html">
+<meta property="og:site_name" content="Easoll">
+<meta property="og:description" content="在安卓中调用Service的startForeground方法可以将service所在进程的优先级提高，减小进程被回收的概率。调用startForeground方法的时候系统会在通知栏显示一个通知，这对于传统的多媒体应用来说是没有问题的。但是对于那些只想提升优先级而不想让用户感知的应用来说强行显示个通知栏看起来太怪异了。
+查看startForeground的源码之后，发现有很重要的两步，如下所示：">
+<meta property="og:updated_time" content="2018-05-19T02:05:04.666Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="提升进程优先级的一种新姿势">
+<meta name="twitter:description" content="在安卓中调用Service的startForeground方法可以将service所在进程的优先级提高，减小进程被回收的概率。调用startForeground方法的时候系统会在通知栏显示一个通知，这对于传统的多媒体应用来说是没有问题的。但是对于那些只想提升优先级而不想让用户感知的应用来说强行显示个通知栏看起来太怪异了。
+查看startForeground的源码之后，发现有很重要的两步，如下所示：">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.mrhere.cn/2018/05/19/提升进程优先级的一种新姿势/"/>
+
+
+
+
+
+  <title>提升进程优先级的一种新姿势 | Easoll</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Easoll</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.mrhere.cn/2018/05/19/提升进程优先级的一种新姿势/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Easoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">提升进程优先级的一种新姿势</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-19T10:05:04+08:00">
+                2018-05-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在安卓中调用Service的startForeground方法可以将service所在进程的优先级提高，减小进程被回收的概率。<br>调用startForeground方法的时候系统会在通知栏显示一个通知，这对于传统的多媒体应用来说是没有问题的。<br>但是对于那些只想提升优先级而不想让用户感知的应用来说强行显示个通知栏看起来太怪异了。</p>
+<p>查看startForeground的源码之后，发现有很重要的两步，如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">ActiveServices.java</div><div class="line"></div><div class="line">private void setServiceForegroundInnerLocked(ServiceRecord r, int id,</div><div class="line">            Notification notification, int flags) &#123;</div><div class="line">        if (id != 0) &#123;</div><div class="line">            ......</div><div class="line">            r.postNotification();  //step1: 在通知栏显示通知</div><div class="line">            if (r.app != null) &#123;</div><div class="line">                updateServiceForegroundLocked(r.app, true);  //step2: 更新进程优先级</div><div class="line">            &#125;</div><div class="line">            getServiceMapLocked(r.userId).ensureNotStartingBackgroundLocked(r);</div><div class="line">            mAm.notifyPackageUse(r.serviceInfo.packageName,</div><div class="line">                                 PackageManager.NOTIFY_PACKAGE_USE_FOREGROUND_SERVICE);</div><div class="line">        &#125; else &#123;</div><div class="line">            ......</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>那么我们有没有办法能让updateServiceForegroundLocked执行成功，而让postNotification()执行失败呢？<br>进一步查看postNotification()方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">ServiceRecord.java</div><div class="line"></div><div class="line">public void postNotification() &#123;</div><div class="line"></div><div class="line">        if (foregroundId != 0 &amp;&amp; foregroundNoti != null) &#123;</div><div class="line">            // Do asynchronous communication with notification manager to</div><div class="line">            // avoid deadlocks.</div><div class="line">            final String localPackageName = packageName;</div><div class="line">            final int localForegroundId = foregroundId;</div><div class="line">            final Notification _foregroundNoti = foregroundNoti;</div><div class="line">            ams.mHandler.post(new Runnable() &#123;</div><div class="line">                public void run() &#123;</div><div class="line">                    NotificationManagerInternal nm = LocalServices.getService(</div><div class="line">                            NotificationManagerInternal.class);</div><div class="line">                    if (nm == null) &#123;</div><div class="line">                        return;</div><div class="line">                    &#125;</div><div class="line">                    Notification localForegroundNoti = _foregroundNoti;</div><div class="line">                    try &#123;</div><div class="line">                        ......</div><div class="line">                        //step1: 向NotificationManagerServervice发送通知</div><div class="line">                        nm.enqueueNotification(localPackageName, localPackageName,</div><div class="line">                                appUid, appPid, null, localForegroundId, localForegroundNoti,</div><div class="line">                                userId);</div><div class="line"></div><div class="line">                    &#125; catch (RuntimeException e) &#123;</div><div class="line">                        Slog.w(TAG, &quot;Error showing notification for service&quot;, e);</div><div class="line">                        // If it gave us a garbage notification, it doesn&apos;t</div><div class="line">                        // get to be foreground.</div><div class="line">                        ams.setServiceForeground(name, ServiceRecord.this,</div><div class="line">                                0, null, 0);</div><div class="line">                        //step2:如果出现异常，则将应用进程crash掉</div><div class="line">                        ams.crashApplication(appUid, appPid, localPackageName, -1,</div><div class="line">                                &quot;Bad notification for startForeground: &quot; + e);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>由上可知，只要enqueueNotification执行出现异常，通知栏则不会显示通知了，但是此时却会导致应用进程crash调用。<br>那么如何使得crashApplication这个方法失效呢，我们进一步查看crashApplication方法的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">ActivityManagerService.java</div><div class="line"></div><div class="line">public void crashApplication(int uid, int initialPid, String packageName, int userId,</div><div class="line">        String message) &#123;</div><div class="line">    if (checkCallingPermission(android.Manifest.permission.FORCE_STOP_PACKAGES)</div><div class="line">            != PackageManager.PERMISSION_GRANTED) &#123;</div><div class="line">        String msg = &quot;Permission Denial: crashApplication() from pid=&quot;</div><div class="line">                + Binder.getCallingPid()</div><div class="line">                + &quot;, uid=&quot; + Binder.getCallingUid()</div><div class="line">                + &quot; requires &quot; + android.Manifest.permission.FORCE_STOP_PACKAGES;</div><div class="line">        Slog.w(TAG, msg);</div><div class="line">        throw new SecurityException(msg);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    synchronized(this) &#123;</div><div class="line">        //最终会通过binder，调用应用进程中的scheduleCrash方法</div><div class="line">        mAppErrors.scheduleAppCrashLocked(uid, initialPid, packageName, userId, message);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">ActivityThread.java</div><div class="line"></div><div class="line"> private class ApplicationThread extends IApplicationThread.Stub &#123;</div><div class="line">    public void scheduleCrash(String msg) &#123;</div><div class="line">         //通过handler发送一个类型为H.SCHEDULE_CRASH的消息</div><div class="line">         sendMessage(H.SCHEDULE_CRASH, msg);</div><div class="line">    &#125;</div><div class="line"> &#125;</div><div class="line"></div><div class="line"> private class H extends Handler &#123;</div><div class="line">   public void handleMessage(Message msg) &#123;</div><div class="line">       if (DEBUG_MESSAGES) Slog.v(TAG, &quot;&gt;&gt;&gt; handling: &quot; + codeToString(msg.what));</div><div class="line">       switch (msg.what) &#123;</div><div class="line">           ......</div><div class="line">           case SCHEDULE_CRASH:</div><div class="line">               //当收到类型为SCHEDULE_CRASH的消息的时候则抛出一个异常，导致进程crash</div><div class="line">               throw new RemoteServiceException((String)msg.obj);</div><div class="line">           ......</div><div class="line">       &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>我们现在已经知道了ams是如何让我们的进程crash的了，基本就是ams跟我们应用进程说，你准备准备该去死了，然后应用进程就去死了。<br>但是做为一个有个性的进程，能不能在ams让他去死的时候假装没听见呢？显然是可以的，基本的流程就是：</p>
+<ol>
+<li>先拿到ActivityThread的实例</li>
+<li>拿到ActivityThread$H 的实例mH</li>
+<li>向mH设置一个Handler.Callback</li>
+<li>在Handler.Callback 中检测到 SCHEDULE_CRASH消息时则消费该消息</li>
+</ol>
+<p>具体实现代码如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">private static void hookH()&#123;</div><div class="line">        if(mHasHookH)&#123;</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        mHasHookH = true;</div><div class="line"></div><div class="line">        try &#123;</div><div class="line">            try &#123;</div><div class="line">                Class hClass = Class.forName(&quot;android.app.ActivityThread$H&quot;);</div><div class="line">                Field scheduleCrashField = hClass.getDeclaredField(&quot;SCHEDULE_CRASH&quot;);</div><div class="line">                mScheduleCrashMsgWhat = (int)scheduleCrashField.get(null);</div><div class="line">                Log.i(TAG, &quot;get mScheduleCrashMsgWhat success&quot;);</div><div class="line">            &#125;catch (Exception e)&#123;</div><div class="line">                Log.i(TAG, &quot;get mScheduleCrashMsgWhat failed&quot;);</div><div class="line"></div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            Handler.Callback callback = new Handler.Callback() &#123;</div><div class="line">                @Override</div><div class="line">                public boolean handleMessage(Message msg) &#123;</div><div class="line">                    Log.i(TAG, msg.toString());</div><div class="line"></div><div class="line">                    if(msg.what == mScheduleCrashMsgWhat)&#123;</div><div class="line">                        return true;</div><div class="line">                    &#125;</div><div class="line"></div><div class="line">                    return false;</div><div class="line">                &#125;</div><div class="line">            &#125;;</div><div class="line"></div><div class="line">            Class activityThreadClass = Class.forName(&quot;android.app.ActivityThread&quot;);</div><div class="line">            Field mH = activityThreadClass.getDeclaredField(&quot;mH&quot;);</div><div class="line">            mH.setAccessible(true);</div><div class="line">            Method currentActivityThread = activityThreadClass.getDeclaredMethod(&quot;currentActivityThread&quot;);</div><div class="line">            Object activityThreadInstance = currentActivityThread.invoke(null);</div><div class="line">            Handler hInstance = (Handler) mH.get(activityThreadInstance);</div><div class="line">            Class handlerClass = Handler.class;</div><div class="line">            Field mCallbackField = handlerClass.getDeclaredField(&quot;mCallback&quot;);</div><div class="line">            mCallbackField.setAccessible(true);</div><div class="line">            mCallbackField.set(hInstance, callback);</div><div class="line">        &#125;catch (Exception e)&#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>这里写了一个工具类方便大家使用：<a href="https://github.com/easoll/RaisePriorityHack" target="_blank" rel="external">RaisePriorityHack</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/安卓/" rel="tag"># 安卓</a>
+          
+            <a href="/tags/进程优先级/" rel="tag"># 进程优先级</a>
+          
+            <a href="/tags/hook/" rel="tag"># hook</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/04/Media-insert插入的图片文件大小比原图小/" rel="next" title="Media.insert插入的图片文件大小比原图小">
+                <i class="fa fa-chevron-left"></i> Media.insert插入的图片文件大小比原图小
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <p class="site-author-name" itemprop="name"></p>
+            <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
