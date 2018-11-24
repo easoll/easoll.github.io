@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="android," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="今天想和大家分享一个在编译时清理Log语句的插件。
+问题描述在平时的开发中我们经常使用安卓的Log方法来打印一些调试信息。由于有很多日志只是在开发时期有需要，所以我们一般通常都会自定义一个Logger，这个Logger只在我们的Debug包中输入日志信息，而在Release包中则不输出，大致的逻辑如下所示：123456789Logger.i(TAG, &amp;quot;name is:&amp;quot; +">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android代码清理插件-Delogger">
+<meta property="og:url" content="http://www.mrhere.cn/2018/11/23/Android代码清理插件-Delogger/index.html">
+<meta property="og:site_name" content="Easoll">
+<meta property="og:description" content="今天想和大家分享一个在编译时清理Log语句的插件。
+问题描述在平时的开发中我们经常使用安卓的Log方法来打印一些调试信息。由于有很多日志只是在开发时期有需要，所以我们一般通常都会自定义一个Logger，这个Logger只在我们的Debug包中输入日志信息，而在Release包中则不输出，大致的逻辑如下所示：123456789Logger.i(TAG, &amp;quot;name is:&amp;quot; +">
+<meta property="og:updated_time" content="2018-11-24T14:17:30.234Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android代码清理插件-Delogger">
+<meta name="twitter:description" content="今天想和大家分享一个在编译时清理Log语句的插件。
+问题描述在平时的开发中我们经常使用安卓的Log方法来打印一些调试信息。由于有很多日志只是在开发时期有需要，所以我们一般通常都会自定义一个Logger，这个Logger只在我们的Debug包中输入日志信息，而在Release包中则不输出，大致的逻辑如下所示：123456789Logger.i(TAG, &amp;quot;name is:&amp;quot; +">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.mrhere.cn/2018/11/23/Android代码清理插件-Delogger/"/>
+
+
+
+
+
+  <title>Android代码清理插件-Delogger | Easoll</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Easoll</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.mrhere.cn/2018/11/23/Android代码清理插件-Delogger/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Easoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android代码清理插件-Delogger</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-23T13:45:41+08:00">
+                2018-11-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>今天想和大家分享一个在编译时清理Log语句的插件。</p>
+<h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><p>在平时的开发中我们经常使用安卓的Log方法来打印一些调试信息。由于有很多日志只是在开发时期有需要，所以我们一般通常都会自定义一个Logger，这个Logger只在我们的Debug包中输入日志信息，而在Release包中则不输出，大致的逻辑如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Logger.i(TAG, &quot;name is:&quot; + name + &quot;and age is: &quot; + age)</div><div class="line"></div><div class="line">class Logger&#123;</div><div class="line">  pulic static void i(String tag, String msg)&#123;</div><div class="line">    if(!isDebug)&#123;</div><div class="line">      Log.i(tag, msg);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这种模式可以确保在release保重是不会打印调试信息的，但是却仍然存在性能问题，因为在调用Logge的i方法之前要先计算出实参的值，也就是说会执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&quot;name is:&quot; + name + &quot;and age is: &quot; + age</div></pre></td></tr></table></figure></p>
+<p>如果以上Logger的使用发生在onDraw等调用非常频繁的方法中的话，则对性能的影响更为严重。</p>
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>其实有过c/c++开发的同学就会想到，用宏可以完美解决这个问题，但奈何java不支持宏定义。那我们有没有其他的方案来实现呢？笔者一开始想用javassist来实现，可是查了一圈资料之后发现javassist并没有符合我们需求的api。最终确定的方案是，在gradle插件运行java compile任务之前对java源码进行扫描，并删除以”Log.”和”Logger.”开头的行。大致逻辑如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">private void doClean(File source, String[] prefixList)&#123;</div><div class="line">        if(source.isFile())&#123;</div><div class="line">            def outputFile = new File(source.parentFile, &quot;tmp_$&#123;source.name&#125;\$&quot;)</div><div class="line"></div><div class="line">            for (singleLine in source.readLines()) &#123;</div><div class="line">                def trimmed = singleLine.trim()</div><div class="line"></div><div class="line">                if (!startWith(trimmed, prefixList)) &#123;        </div><div class="line">                    outputFile.append(singleLine)</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                outputFile.append(&quot;\n&quot;)  //keep the line number correct</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            outputFile.renameTo(source)</div><div class="line">        &#125;else&#123;</div><div class="line">            def children = source.listFiles()</div><div class="line">            for(file in children)&#123;</div><div class="line">                doClean(file, prefixList)</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>处理逻辑已经实现了，那么我们在什么时候执行删除操作呢？在安卓的编译过程中有一个compile${variantName}JavaWithJavac，我们可以在该方法之前执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//hook javac compile</div><div class="line">Task compileJavaTask = project.tasks.getByName(&quot;compile$&#123;variantName&#125;JavaWithJavac&quot;)</div><div class="line">compileJavaTask.doFirst &#123;</div><div class="line">  doClean()</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>通过以上的代码，我们则可以将源代码中的Logger语句移除了。但是，我们可以直接操作将源代码中的Logger语句移除吗？不行的，我们应该先将源代码复制到一个临时目录中，然后将这些临时目录中的源码中的Logger移除，最后将compile${variantName}JavaWithJavac 任务的输入目录改为这个临时目录：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">//hook javac compile</div><div class="line">Task compileJavaTask = project.tasks.getByName(&quot;compile$&#123;variantName&#125;JavaWithJavac&quot;)</div><div class="line">compileJavaTask.doFirst &#123;</div><div class="line">    if(compileJavaTask instanceof AndroidJavaCompile)&#123;</div><div class="line">        def androidJavaCompile = (AndroidJavaCompile) compileJavaTask</div><div class="line"></div><div class="line">        def sourceField = SourceTask.class.getDeclaredField(&quot;source&quot;)</div><div class="line">        sourceField.setAccessible(true)</div><div class="line">        def source = (List&lt;DefaultConfigurableFileTree&gt;)sourceField.get(androidJavaCompile)</div><div class="line">        def iterator = source.iterator()</div><div class="line">        while(iterator.hasNext())&#123;</div><div class="line">            def fileTree = iterator.next()</div><div class="line">            if(fileTree instanceof DefaultConfigurableFileTree) &#123;</div><div class="line">                if (fileTree.dir.absolutePath.endsWith(&quot;src/main/java&quot;)) &#123;  //replace source java dir</div><div class="line">                    def cleanDir = new File(cleanDirPath)</div><div class="line">                    FileUtils.copyDirectory(fileTree.dir, cleanDir)</div><div class="line">                    doClean(cleanDir, prefixList)</div><div class="line">                    fileTree.from(cleanDir)</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>至此，我们便能真正实现我们最初的目的，移除java文件中的Logger了，大家可以尝试移除kotlin文件中的Logger。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>文中的源码可以参考<a href="https://github.com/easoll/Delogger" target="_blank" rel="external">Delogger</a>。笔者希望本文中使用的预处理思路可以起到抛砖引玉的作用，大家可以头脑风暴一下这种预处理方式的其他使用场景。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag"># android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/23/记一次安卓Handler-removeMessages引发的问题/" rel="next" title="记一次安卓Handler.removeMessages引发的问题">
+                <i class="fa fa-chevron-left"></i> 记一次安卓Handler.removeMessages引发的问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <p class="site-author-name" itemprop="name"></p>
+            <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#问题描述"><span class="nav-number">1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解决方案"><span class="nav-number">2.</span> <span class="nav-text">解决方案</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

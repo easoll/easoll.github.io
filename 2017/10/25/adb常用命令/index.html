@@ -53,7 +53,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="android,broadcast," />
+  <meta name="keywords" content="android,adb," />
 
 
 
@@ -69,16 +69,25 @@
 
 
 
-<meta name="description" content="注册广播接收器注册广播接收器可以在manifest文件中静态注册也可以在代码中用Context实例动态注册。需要注意的是，如果你在manifest中注册了广播接收器，当你监听的广播发出的时候，广播接收器都能接收到广播，而不管之前你的应用有没有运行。但是如果你是用context注册广播接收器的话，只有当你注册的context还有效的时候你才能接收到广播。比如你使用Activity来注册广播监听器，那">
+<meta name="description" content="查看cpu信息adb shell cat /proc/cpuinfo
+查看当前Activity的信息，及所属应用包名adb shell dumpsys activity top | head -n 10
+提取当前Activity所属应用的安装包adb shell pm list packages -f 包名  //可以获取apk的路径adb pull apk路径
+查看应用的uidadb shell">
 <meta property="og:type" content="article">
-<meta property="og:title" content="安卓广播总结">
-<meta property="og:url" content="http://www.mrhere.cn/2017/10/08/安卓广播总结/index.html">
+<meta property="og:title" content="adb常用命令">
+<meta property="og:url" content="http://www.mrhere.cn/2017/10/25/adb常用命令/index.html">
 <meta property="og:site_name" content="Easoll">
-<meta property="og:description" content="注册广播接收器注册广播接收器可以在manifest文件中静态注册也可以在代码中用Context实例动态注册。需要注意的是，如果你在manifest中注册了广播接收器，当你监听的广播发出的时候，广播接收器都能接收到广播，而不管之前你的应用有没有运行。但是如果你是用context注册广播接收器的话，只有当你注册的context还有效的时候你才能接收到广播。比如你使用Activity来注册广播监听器，那">
-<meta property="og:updated_time" content="2018-10-07T03:46:07.085Z">
+<meta property="og:description" content="查看cpu信息adb shell cat /proc/cpuinfo
+查看当前Activity的信息，及所属应用包名adb shell dumpsys activity top | head -n 10
+提取当前Activity所属应用的安装包adb shell pm list packages -f 包名  //可以获取apk的路径adb pull apk路径
+查看应用的uidadb shell">
+<meta property="og:updated_time" content="2018-11-23T05:42:27.943Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="安卓广播总结">
-<meta name="twitter:description" content="注册广播接收器注册广播接收器可以在manifest文件中静态注册也可以在代码中用Context实例动态注册。需要注意的是，如果你在manifest中注册了广播接收器，当你监听的广播发出的时候，广播接收器都能接收到广播，而不管之前你的应用有没有运行。但是如果你是用context注册广播接收器的话，只有当你注册的context还有效的时候你才能接收到广播。比如你使用Activity来注册广播监听器，那">
+<meta name="twitter:title" content="adb常用命令">
+<meta name="twitter:description" content="查看cpu信息adb shell cat /proc/cpuinfo
+查看当前Activity的信息，及所属应用包名adb shell dumpsys activity top | head -n 10
+提取当前Activity所属应用的安装包adb shell pm list packages -f 包名  //可以获取apk的路径adb pull apk路径
+查看应用的uidadb shell">
 
 
 
@@ -108,13 +117,13 @@
 
 
 
-  <link rel="canonical" href="http://www.mrhere.cn/2017/10/08/安卓广播总结/"/>
+  <link rel="canonical" href="http://www.mrhere.cn/2017/10/25/adb常用命令/"/>
 
 
 
 
 
-  <title>安卓广播总结 | Easoll</title>
+  <title>adb常用命令 | Easoll</title>
   
 
 
@@ -241,7 +250,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.mrhere.cn/2017/10/08/安卓广播总结/">
+    <link itemprop="mainEntityOfPage" href="http://www.mrhere.cn/2017/10/25/adb常用命令/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -258,7 +267,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">安卓广播总结</h1>
+          <h1 class="post-title" itemprop="name headline">adb常用命令</h1>
         
 
         <div class="post-meta">
@@ -270,8 +279,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T15:21:54+08:00">
-                2017-10-08
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-25T14:59:41+08:00">
+                2017-10-25
               </time>
             
 
@@ -280,28 +289,6 @@
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/android/" itemprop="url" rel="index">
-                    <span itemprop="name">android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -330,34 +317,17 @@
       
 
       
-        <h1 id="注册广播接收器"><a href="#注册广播接收器" class="headerlink" title="注册广播接收器"></a>注册广播接收器</h1><p>注册广播接收器可以在manifest文件中静态注册也可以在代码中用Context实例动态注册。需要注意的是，如果你在manifest中注册了广播接收器，当你监听的广播发出的时候，广播接收器都能接收到广播，而不管之前你的应用有没有运行。但是如果你是用context注册广播接收器的话，只有当你注册的context还有效的时候你才能接收到广播。比如你使用Activity来注册广播监听器，那么你只能在Activity还未销毁的时候才能接收到广播。如果你使用Application来注册广播接收器，那么你只有在应用运行的时候才能接收到广播。</p>
-<h1 id="注销广播接收器"><a href="#注销广播接收器" class="headerlink" title="注销广播接收器"></a>注销广播接收器</h1><p>对于使用context注册的广播接收器，如果你想停止接收广播，你可以使用unregisterReceiver(BroadcastReceiver)来停止接收。当你不再需要广播接收器或者context不再有效的时候你应该注销它。需要注意一下你注册和注销广播接收器的地方，以免出现内存泄漏。比如你在activity的onCreate（Bundle）中注册了广播接收器，你就应该在onDestroy（）中注销它；如果你在onResume（）中注册就应该在onPause（）中注销。</p>
-<h1 id="发送广播"><a href="#发送广播" class="headerlink" title="发送广播"></a>发送广播</h1><p>安卓提供了三总方法来发送广播</p>
-<ul>
-<li>sendOrderedBroadcast(Intent, String)</li>
-<li>sendBroadcast(Intent)</li>
-<li>LocalBroadcastManager.sendBroadcast()</li>
-</ul>
-<h1 id="广播接收器对进程状态的影响。"><a href="#广播接收器对进程状态的影响。" class="headerlink" title="广播接收器对进程状态的影响。"></a>广播接收器对进程状态的影响。</h1><p> 广播接收器的状态能够影响容器进程的状态，也就是说这将影响它被系统杀死的可能性。比如当进程正在执行广播接收器的时候（当前执行的代码在onReceive方法中），该进程就会被视作为前台进程。系统将保证它的正常运行，除非内存极度缺乏的情况下才会杀死该进程。然而，一旦运行的代码从onReceive中返回之后，广播接收器就不再是活动状态。该宿主进程的优先级将由运行在该进程内的其他组件决定。如果进程内只包含一个在manifest中声明的广播接收器，那么一旦从onReceive中返回，系统将把它视作一个低优先级的进程并且可能将它杀死来为其他更重要的进程提供资源。基于以上原因，你不应该在广播接收其中开启后台进程，而应该使用goAsync()或者是JobService。</p>
-<h1 id="权限问题"><a href="#权限问题" class="headerlink" title="权限问题"></a>权限问题</h1><ul>
-<li>当你发送广播的时候，你能够指明一个权限参数，只有那些在manifest文件中申请了相应权限（如果是危险权限的话需要用户已经授权）的接收器能接收到该广播。</li>
-<li>当你注册广播接收器的时候，如果你指明了一个权限参数，那么只有那些在manifest文件中申请了相应权限（如果是危险权限的话需要用户已经授权）的应用能向改接收器发送广播。</li>
-</ul>
-<h1 id="其他注意事项"><a href="#其他注意事项" class="headerlink" title="其他注意事项"></a>其他注意事项</h1><ol>
-<li><p>在安卓7.0及更高的版本中，一下的系统广播将不再发送。这个优化将影响到所有的应用，不仅仅是那些面向安卓7.0开发的应用。</p>
-<ul>
-<li>ACTION_NEW_PICTURE</li>
-<li>ACTION_NEW_VIDEO    </li>
-</ul>
-</li>
-<li><p>那些面向安卓7.0（api 24）及更高的版本开发的应用必须使用registerReceiver(BroadcastReceiver, IntentFilter)来注册广播监听。在manifest文件中注册监听将不再起作用         </p>
-<ul>
-<li>CONNECTIVITY_ACTION</li>
-</ul>
-</li>
-<li><p>从安卓8.0（api 26）开始，系统对在manifest中声明的广播接收器增加了额外的限制。如果你的应用面向api 26或者更高，你将不能在manifest中声明接收隐式广播（没有特意指明发送给你的应用的广播）的接收器。</p>
-</li>
-</ol>
+        <h1 id="查看cpu信息"><a href="#查看cpu信息" class="headerlink" title="查看cpu信息"></a>查看cpu信息</h1><p>adb shell cat /proc/cpuinfo</p>
+<h1 id="查看当前Activity的信息，及所属应用包名"><a href="#查看当前Activity的信息，及所属应用包名" class="headerlink" title="查看当前Activity的信息，及所属应用包名"></a>查看当前Activity的信息，及所属应用包名</h1><p>adb shell dumpsys activity top | head -n 10</p>
+<h1 id="提取当前Activity所属应用的安装包"><a href="#提取当前Activity所属应用的安装包" class="headerlink" title="提取当前Activity所属应用的安装包"></a>提取当前Activity所属应用的安装包</h1><p>adb shell pm list packages -f 包名  //可以获取apk的路径<br>adb pull apk路径</p>
+<h1 id="查看应用的uid"><a href="#查看应用的uid" class="headerlink" title="查看应用的uid"></a>查看应用的uid</h1><p>adb shell dumpsys package 包名 | grep uid</p>
+<h1 id="查看应用包含的so文件"><a href="#查看应用包含的so文件" class="headerlink" title="查看应用包含的so文件"></a>查看应用包含的so文件</h1><h1 id="截屏"><a href="#截屏" class="headerlink" title="截屏"></a>截屏</h1><p>方法1：<br>adb shell<br>screencap -p /data/local/tmp/文件名<br>adb pull /data/local/tmp/文件名 .<br>方法2：<br>adb exec-out screencap -p &gt; 文件名</p>
+<h1 id="查看安装了多少非系统应用"><a href="#查看安装了多少非系统应用" class="headerlink" title="查看安装了多少非系统应用"></a>查看安装了多少非系统应用</h1><p>adb shell pm list packages -3 | wc -l</p>
+<h1 id="查看支持的abi"><a href="#查看支持的abi" class="headerlink" title="查看支持的abi"></a>查看支持的abi</h1><p>adb shell cat /system/build.prop | grep product</p>
+<h1 id="设置启动时等待调试的应用"><a href="#设置启动时等待调试的应用" class="headerlink" title="设置启动时等待调试的应用"></a>设置启动时等待调试的应用</h1><p>adb shell am set-debug-app -w –persistent 包名<br>adb shell am clear-debug-app 包名</p>
+<h1 id="清除应用数据"><a href="#清除应用数据" class="headerlink" title="清除应用数据"></a>清除应用数据</h1><p>adb shell pm clear 包名</p>
+<h1 id="查看崩溃日志"><a href="#查看崩溃日志" class="headerlink" title="查看崩溃日志"></a>查看崩溃日志</h1><p>adb shell dumpsys dropbox –print</p>
+<h1 id="查看设备支持的编解码格式"><a href="#查看设备支持的编解码格式" class="headerlink" title="查看设备支持的编解码格式"></a>查看设备支持的编解码格式</h1><p>adb pull /system/etc/media_codecs.xml</p>
 
       
     </div>
@@ -377,7 +347,7 @@
           
             <a href="/tags/android/" rel="tag"># android</a>
           
-            <a href="/tags/broadcast/" rel="tag"># broadcast</a>
+            <a href="/tags/adb/" rel="tag"># adb</a>
           
         </div>
       
@@ -390,8 +360,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/09/25/安卓通知栏消息使用总结/" rel="next" title="安卓通知栏消息使用总结">
-                <i class="fa fa-chevron-left"></i> 安卓通知栏消息使用总结
+              <a href="/2017/10/19/python中repr与str的区别/" rel="next" title="python中repr与str的区别">
+                <i class="fa fa-chevron-left"></i> python中repr与str的区别
               </a>
             
           </div>
@@ -400,8 +370,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/10/08/adb用法大全/" rel="prev" title="adb用法大全">
-                adb用法大全 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/10/25/gradle常用命令/" rel="prev" title="gradle常用命令">
+                gradle常用命令 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -535,7 +505,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#注册广播接收器"><span class="nav-number">1.</span> <span class="nav-text">注册广播接收器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注销广播接收器"><span class="nav-number">2.</span> <span class="nav-text">注销广播接收器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#发送广播"><span class="nav-number">3.</span> <span class="nav-text">发送广播</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#广播接收器对进程状态的影响。"><span class="nav-number">4.</span> <span class="nav-text">广播接收器对进程状态的影响。</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#权限问题"><span class="nav-number">5.</span> <span class="nav-text">权限问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他注意事项"><span class="nav-number">6.</span> <span class="nav-text">其他注意事项</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#查看cpu信息"><span class="nav-number">1.</span> <span class="nav-text">查看cpu信息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查看当前Activity的信息，及所属应用包名"><span class="nav-number">2.</span> <span class="nav-text">查看当前Activity的信息，及所属应用包名</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#提取当前Activity所属应用的安装包"><span class="nav-number">3.</span> <span class="nav-text">提取当前Activity所属应用的安装包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查看应用的uid"><span class="nav-number">4.</span> <span class="nav-text">查看应用的uid</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查看应用包含的so文件"><span class="nav-number">5.</span> <span class="nav-text">查看应用包含的so文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#截屏"><span class="nav-number">6.</span> <span class="nav-text">截屏</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查看安装了多少非系统应用"><span class="nav-number">7.</span> <span class="nav-text">查看安装了多少非系统应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查看支持的abi"><span class="nav-number">8.</span> <span class="nav-text">查看支持的abi</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设置启动时等待调试的应用"><span class="nav-number">9.</span> <span class="nav-text">设置启动时等待调试的应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#清除应用数据"><span class="nav-number">10.</span> <span class="nav-text">清除应用数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查看崩溃日志"><span class="nav-number">11.</span> <span class="nav-text">查看崩溃日志</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查看设备支持的编解码格式"><span class="nav-number">12.</span> <span class="nav-text">查看设备支持的编解码格式</span></a></li></ol></div>
             
 
           </div>
